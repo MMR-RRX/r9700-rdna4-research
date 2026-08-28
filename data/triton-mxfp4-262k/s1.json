@@ -1,0 +1,40 @@
+{
+  "setup": "triton-mxfp4-262k",
+  "port": 8015,
+  "served_model": "bench-triton-mxfp4-262k",
+  "thinking": false,
+  "temperature": 0,
+  "max_len": 262144,
+  "windows": {
+    "262144": {
+      "prefill": {
+        "runs": [
+          {
+            "prompt_tokens": 239758,
+            "ttft_s": 284.6487049269999,
+            "pp_tok_s": 842.2943644218847
+          }
+        ],
+        "ttft_median_ms": 284648.7,
+        "pp_median_tok_s": 842
+      },
+      "decode": {
+        "runs": [
+          {
+            "prompt_tokens": 239778,
+            "completion_tokens": 256,
+            "ttft_s": 2.711966633999964,
+            "pp_tok_s": 88414.80459010809,
+            "tg_tok_s": 33.025384894104754,
+            "e2e_tok_s": 24.53664717755292
+          }
+        ],
+        "ttft_median_ms": 2712.0,
+        "pp_median_tok_s": 88415,
+        "tg_median_tok_s": 33.0,
+        "e2e_median_tok_s": 24.5,
+        "completion_tokens": 256
+      }
+    }
+  }
+}
