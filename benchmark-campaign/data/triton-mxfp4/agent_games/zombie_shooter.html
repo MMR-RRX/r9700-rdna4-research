@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Zombie Shooter</title>
+<style>
+  html,body{margin:0;padding:0;overflow:hidden;background:#000}
+  #hud{position:absolute;top:10px;left:10px;color:#0f0;font:20px monospace;
+       text-shadow:0 0 5px #0f0;pointer-events:none;z-index:10}
+  #msg{position:absolute;top:40%;width:100%;text-align:center;color:#f33;
+       font:40px monospace;display:none;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="hud">Kills: <span id="kills">0</span> &nbsp; HP: <span id="hp">100</span></div>
+<div id="msg">YOU DIED — click to restart</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
+<script>
+// ---------- setup ----------
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a12);
+scene.fog = new THREE.Fog(0x0a0a12, 10, 60);
+const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 200);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0x404050));
+const moon = new THREE.DirectionalLight(0x8899ff, 0.8);
+moon.position.set(10, 20, 5);
+scene.add(moon);
+
+// ground + scattered obstacles
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(200, 200),
+  new THREE.MeshLambertMaterial({color: 0x1a2a1a}));
+ground.rotation.x = -Math.PI/2;
+scene.add(ground);
+for (let i = 0; i < 30; i++) {
+  const rock = new THREE.Mesh(
+    new THREE.BoxGeometry(1+Math.random()*3, 1+Math.random()*4, 1+Math.random()*3),
+    new THREE.MeshLambertMaterial({color: 0x333340}));
+  const a = Math.random()*Math.PI*2, r = 15+Math.random()*70;
+  rock.position.set(Math.cos(a)*r, 1, Math.sin(a)*r);
+  scene.add(rock);
+}
+
+// gun (muzzle flash light)
+const gun = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.5),
+  new THREE.MeshBasicMaterial({color:0x222222}));
+gun.position.set(0.3,-0.3,-0.7);
+camera.add(gun);
+scene.add(camera);
+const flash = new THREE.PointLight(0xffaa33, 0, 5);
+flash.position.set(0.3,-0.3,-1);
+camera.add(flash);
+
+// ---------- player state ----------
+const player = { pos: new THREE.Vector3(0, 1.7, 0), yaw: 0, pitch: 0, hp: 100, kills: 0, dead: false };
+const keys = {};
+document.addEventListener('keydown', e => keys[e.code] = true);
+document.addEventListener('keyup', e => keys[e.code] = false);
+document.addEventListener('mousemove', e => {
+  if (document.pointerLockElement !== renderer.domElement || player.dead) return;
+  player.yaw   -= e.movementX * 0.0022;
+  player.pitch -= e.movementY * 0.0022;
+  player.pitch = Math.max(-1.4, Math.min(1.4, player.pitch));
+});
+document.addEventListener('click', () => {
+  if (player.dead) { restart(); return; }
+  renderer.domElement.requestPointerLock();
+  if (document.pointerLockElement === renderer.domElement) shoot();
+});
+
+// ---------- zombies ----------
+const zombies = [];
+const zGeoHead = new THREE.BoxGeometry(0.6,0.6,0.6);
+const zGeoBody = new THREE.BoxGeometry(0.8,1.2,0.5);
+const zMat = new THREE.MeshLambertMaterial({color: 0x3a6a3a});
+function spawnZombie() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(zGeoBody, zMat); body.position.y = 0.9;
+  const head = new THREE.Mesh(zGeoHead, zMat); head.position.y = 1.85;
+  g.add(body, head);
+  const a = Math.random()*Math.PI*2, r = 35 + Math.random()*25;
+  g.position.set(player.pos.x + Math.cos(a)*r, 0, player.pos.z + Math.sin(a)*r);
+  scene.add(g);
+  zombies.push({ mesh: g, hp: 3, speed: 1.5 + Math.random()*1.5, hurt: 0 });
+}
+function shoot() {
+  flash.intensity = 3;
+  // raycast against zombie bodies
+  const ray = new THREE.Raycaster();
+  ray.setFromCamera(new THREE.Vector2(0,0), camera);
+  let best = null, bestD = 1e9;
+  for (const z of zombies) {
+    const hits = ray.intersectObject(z.mesh, true);
+    if (hits.length && hits[0].distance < bestD) { best = z; bestD = hits[0].distance; }
+  }
+  if (best) {
+    best.hp--; best.hurt = 0.15;
+    if (best.hp <= 0) {
+      scene.remove(best.mesh);
+      zombies.splice(zombies.indexOf(best), 1);
+      player.kills++;
+      document.getElementById('kills').textContent = player.kills;
+    }
+  }
+}
+
+// ---------- game loop ----------
+let last = performance.now(), spawnTimer = 0;
+function restart() {
+  player.hp = 100; player.kills = 0; player.dead = false;
+  player.pos.set(0, 1.7, 0);
+  zombies.forEach(z => scene.remove(z.mesh));
+  zombies.length = 0;
+  document.getElementById('msg').style.display = 'none';
+  updateHud();
+}
+function updateHud() {
+  document.getElementById('hp').textContent = Math.max(0, Math.floor(player.hp));
+}
+function animate(now) {
+  requestAnimationFrame(animate);
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  flash.intensity *= 0.8;
+
+  if (!player.dead) {
+    // movement (right = cross(forward, up))
+    const fwd = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
+    const rgt = new THREE.Vector3(-fwd.z, 0, fwd.x);
+    const v = new THREE.Vector3();
+    if (keys.KeyW) v.add(fwd);
+    if (keys.KeyS) v.sub(fwd);
+    if (keys.KeyD) v.add(rgt);
+    if (keys.KeyA) v.sub(rgt);
+    if (v.lengthSq() > 0) v.normalize().multiplyScalar(8 * dt);
+    player.pos.add(v);
+    // clamp to arena
+    player.pos.x = Math.max(-90, Math.min(90, player.pos.x));
+    player.pos.z = Math.max(-90, Math.min(90, player.pos.z));
+
+    // zombies chase
+    for (const z of zombies) {
+      if (z.hurt > 0) z.hurt -= dt;
+      const dir = new THREE.Vector3().subVectors(player.pos, z.mesh.position);
+      dir.y = 0;
+      const d = dir.length();
+      dir.normalize();
+      z.mesh.position.addScaledVector(dir, z.speed * dt);
+      z.mesh.rotation.y = Math.atan2(dir.x, dir.z);
+      z.mesh.children[1].rotation.y = Math.sin(now*0.005) * 0.2; // head sway
+      if (d < 1.2) { player.hp -= 25 * dt; updateHud(); }
+    }
+    // spawn
+    spawnTimer -= dt;
+    if (spawnTimer <= 0 && zombies.length < 25) {
+      spawnZombie();
+      spawnTimer = Math.max(0.5, 2.5 - player.kills * 0.05);
+    }
+    if (player.hp <= 0) {
+      player.dead = true;
+      document.getElementById('msg').style.display = 'block';
+      document.exitPointerLock();
+    }
+  }
+
+  // camera
+  camera.position.copy(player.pos);
+  camera.rotation.set(player.pitch, player.yaw, 0, 'YXZ');
+  renderer.render(scene, camera);
+}
+requestAnimationFrame(animate);
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
