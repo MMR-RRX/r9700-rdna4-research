@@ -1,0 +1,72 @@
+{
+  "setup": "aiter-mxfp4",
+  "port": 8011,
+  "served_model": "bench-aiter-mxfp4",
+  "temperature": 0.9,
+  "top_p": 0.95,
+  "gen": 256,
+  "thinking": true,
+  "streaming": false,
+  "concurrency": [
+    {
+      "users": 1,
+      "done": "1/1",
+      "per_user_tok_s": 17.5,
+      "agg_tok_s": 17.5,
+      "mean_wall_s": 14.6,
+      "max_wall_s": 14.6,
+      "total_completion_tokens": 256,
+      "errors": []
+    },
+    {
+      "users": 2,
+      "done": "2/2",
+      "per_user_tok_s": 15.5,
+      "agg_tok_s": 30.3,
+      "mean_wall_s": 16.9,
+      "max_wall_s": 16.9,
+      "total_completion_tokens": 512,
+      "errors": []
+    },
+    {
+      "users": 4,
+      "done": "4/4",
+      "per_user_tok_s": 13.8,
+      "agg_tok_s": 53.0,
+      "mean_wall_s": 18.7,
+      "max_wall_s": 19.3,
+      "total_completion_tokens": 1024,
+      "errors": []
+    },
+    {
+      "users": 8,
+      "done": "8/8",
+      "per_user_tok_s": 16.5,
+      "agg_tok_s": 119.4,
+      "mean_wall_s": 16.2,
+      "max_wall_s": 17.2,
+      "total_completion_tokens": 2048,
+      "errors": []
+    },
+    {
+      "users": 16,
+      "done": "16/16",
+      "per_user_tok_s": 14.5,
+      "agg_tok_s": 208.5,
+      "mean_wall_s": 18.0,
+      "max_wall_s": 19.6,
+      "total_completion_tokens": 4096,
+      "errors": []
+    },
+    {
+      "users": 32,
+      "done": "32/32",
+      "per_user_tok_s": 12.0,
+      "agg_tok_s": 359.1,
+      "mean_wall_s": 21.2,
+      "max_wall_s": 22.8,
+      "total_completion_tokens": 8192,
+      "errors": []
+    }
+  ]
+}

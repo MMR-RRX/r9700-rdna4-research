@@ -1,0 +1,40 @@
+{
+  "setup": "triton-fp8-262k",
+  "port": 8014,
+  "served_model": "bench-triton-fp8-262k",
+  "thinking": false,
+  "temperature": 0,
+  "max_len": 262144,
+  "windows": {
+    "262144": {
+      "prefill": {
+        "runs": [
+          {
+            "prompt_tokens": 239758,
+            "ttft_s": 279.419411741,
+            "pp_tok_s": 858.0577795440962
+          }
+        ],
+        "ttft_median_ms": 279419.4,
+        "pp_median_tok_s": 858
+      },
+      "decode": {
+        "runs": [
+          {
+            "prompt_tokens": 239778,
+            "completion_tokens": 256,
+            "ttft_s": 2.625109029999976,
+            "pp_tok_s": 91340.2061627902,
+            "tg_tok_s": 55.44264805227795,
+            "e2e_tok_s": 35.43483691598415
+          }
+        ],
+        "ttft_median_ms": 2625.1,
+        "pp_median_tok_s": 91340,
+        "tg_median_tok_s": 55.4,
+        "e2e_median_tok_s": 35.4,
+        "completion_tokens": 256
+      }
+    }
+  }
+}

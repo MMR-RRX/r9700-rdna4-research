@@ -1,0 +1,45 @@
+{
+  "setup": "triton-fp8",
+  "port": 8012,
+  "served_model": "bench-triton-fp8",
+  "task": "3D zombie shooting game (~200 LOC)",
+  "rounds": 4,
+  "tool_calls": 2,
+  "files": [
+    "zombie_game.html"
+  ],
+  "total_lines": 212,
+  "has_game_loop_marker": true,
+  "complete": true,
+  "finish_summary": "Built a complete 3D zombie shooter in a single HTML file (zombie_game.html, ~212 lines) using Three.js. Features: FPS controls (WASD movement, Shift sprint, mouse-look via pointer lock), zombies that spawn in waves and chase the player with glowing red eyes, raycast shooting (click to fire, 3 hits to kill), health/score HUD, fog and moonlit lighting, ground grid with obstacle crates, death screen with restart. Open the file in a browser and click to lock the mouse and play.",
+  "wall_s": 347.5,
+  "prompt_tokens": 5326,
+  "completion_tokens": 19497,
+  "effective_tok_s": 71.4,
+  "per_round": [
+    {
+      "round": 1,
+      "wall_s": 151.26,
+      "prompt_tokens": 614,
+      "completion_tokens": 8192
+    },
+    {
+      "round": 2,
+      "wall_s": 145.89,
+      "prompt_tokens": 640,
+      "completion_tokens": 8192
+    },
+    {
+      "round": 3,
+      "wall_s": 43.87,
+      "prompt_tokens": 666,
+      "completion_tokens": 2846
+    },
+    {
+      "round": 4,
+      "wall_s": 6.45,
+      "prompt_tokens": 3406,
+      "completion_tokens": 267
+    }
+  ]
+}

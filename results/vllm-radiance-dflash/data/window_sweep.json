@@ -1,0 +1,74 @@
+{
+  "model": "qwen3.8-27b",
+  "max_len": 163840,
+  "thinking": "off",
+  "temp": 0,
+  "note": "256K substitution: windows capped at server max-model-len",
+  "windows": {
+    "8192": {
+      "prefill": {
+        "prompt_tokens": 7459,
+        "ttft_ms": 2531.2,
+        "pp_tok_s": 2946.8
+      },
+      "decode": {
+        "prompt_tokens": 7476,
+        "completion_tokens": 256,
+        "ttft_ms": 577.8,
+        "tg_tok_s": 165.4
+      }
+    },
+    "32768": {
+      "prefill": {
+        "prompt_tokens": 29950,
+        "ttft_ms": 10523.4,
+        "pp_tok_s": 2846.0
+      },
+      "decode": {
+        "prompt_tokens": 29967,
+        "completion_tokens": 256,
+        "ttft_ms": 720.9,
+        "tg_tok_s": 161.3
+      }
+    },
+    "65536": {
+      "prefill": {
+        "prompt_tokens": 59920,
+        "ttft_ms": 24730.9,
+        "pp_tok_s": 2422.9
+      },
+      "decode": {
+        "prompt_tokens": 59937,
+        "completion_tokens": 256,
+        "ttft_ms": 583.3,
+        "tg_tok_s": 150.7
+      }
+    },
+    "131072": {
+      "prefill": {
+        "prompt_tokens": 119868,
+        "ttft_ms": 53324.4,
+        "pp_tok_s": 2247.9
+      },
+      "decode": {
+        "prompt_tokens": 119885,
+        "completion_tokens": 256,
+        "ttft_ms": 812.7,
+        "tg_tok_s": 152.0
+      }
+    },
+    "163840": {
+      "prefill": {
+        "prompt_tokens": 149843,
+        "ttft_ms": 71736.2,
+        "pp_tok_s": 2088.8
+      },
+      "decode": {
+        "prompt_tokens": 149860,
+        "completion_tokens": 256,
+        "ttft_ms": 946.0,
+        "tg_tok_s": 153.5
+      }
+    }
+  }
+}
