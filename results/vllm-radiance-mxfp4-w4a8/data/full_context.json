@@ -1,0 +1,14 @@
+{
+  "campaign": "B: MXFP4-W4A8 + DFlash2-FP8",
+  "served_max_len": 262144,
+  "max_context_tokens": 262144,
+  "kv_cache_tokens": 895544,
+  "runs": [
+    {"label": "~255K cold prefill", "prompt_toks": 255000, "prompt_tokens": 254196,
+     "completion_tokens": 1, "wall_s": 94.13, "prefill_tps": 2700.3, "valid": true,
+     "note": "full-context accepted (valid cold prefill)"},
+    {"label": "128K prefill", "prompt_toks": 128000, "prompt_tokens": 127732,
+     "completion_tokens": 1, "wall_s": 1.22, "prefill_tps": 104774.0, "valid": false,
+     "note": "PREFIX-CACHE artifact (repeated text hit cache) — invalid, not a real prefill"}
+  ]
+}

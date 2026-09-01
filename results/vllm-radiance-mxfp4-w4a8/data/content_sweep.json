@@ -1,0 +1,16 @@
+{
+  "campaign": "B: MXFP4-W4A8 + DFlash2-FP8",
+  "model": "Qwen3.8-27B (MXFP4-W4A8), drafter z-lab/Qwen3.8-27B-DFlash2",
+  "gen": 256,
+  "method": "decode_tps = completion_tokens / wall (single-stream)",
+  "note": "greedy+think-off count/math are INVALID (short output ~3-5 tokens -> wall dominates); use the sampled+xhigh column for the reliable cross-setup comparison. A's report used 1/mean TPOT.",
+  "categories": {
+    "json":      {"greedy_nothink": 142.2, "sample_xhigh": 186.5, "ttft_ms_xhigh": 63},
+    "count":     {"greedy_nothink": 32.5,  "sample_xhigh": 160.7, "ttft_ms_xhigh": 60},
+    "code":      {"greedy_nothink": 190.4, "sample_xhigh": 103.2, "ttft_ms_xhigh": 59},
+    "file_edit": {"greedy_nothink": 152.9, "sample_xhigh": 163.2, "ttft_ms_xhigh": 62},
+    "math":      {"greedy_nothink": 33.8,  "sample_xhigh": 193.6, "ttft_ms_xhigh": 60},
+    "prose":     {"greedy_nothink": 92.8,  "sample_xhigh": 81.3,  "ttft_ms_xhigh": 58},
+    "reasoning": {"greedy_nothink": 247.9, "sample_xhigh": 143.0, "ttft_ms_xhigh": 60}
+  }
+}
